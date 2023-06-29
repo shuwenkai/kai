@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "dist", // 输出的目录
+    "sourceMap": true, // 启用sourcemap
+    "target": "es2016", // 目标语法
+    "module": "esnext", // 模块格式为esm
+    "moduleResolution": "node", // 模块解析方式
+    "strict": false, // 严格模式，可以使用any
+    "resolveJsonModule": true, // 解析json模块
+    "esModuleInterop": true, // 允许通过es6语法引入commonjs模块
+    "jsx": "preserve", // jsx 不转义
+    "lib": ["esnext", "dom"], // 支持的类库 esnext及dom
+    /* 
+     baseUrl 将根路径定位在当前目录
+     paths自定义包路径
+     下面配置的意思就是，只要import了以@vue/*开头的包，那么就会去packages文件夹下的子文件夹的src目录下寻找
+    */
+    "baseUrl": "./",
+    "paths": {
+      "@vue/*": ["packages/*/src"]
+    }
+  }
+}
