@@ -1,5 +1,5 @@
 import { isObject } from "@vue/shared"
-
+import { activeEffect } from "."
 
 enum ReactiveFlags {
     IS_REACTIVE = '__v_isReactive'
@@ -9,7 +9,8 @@ const reactiveWeakMap = new WeakMap()
 
 const mutableHandlers = {
     get(target, key, receiver) {
-        if(key === ReactiveFlags.IS_REACTIVE){
+        console.log(activeEffect, 'activeEffect')
+        if (key === ReactiveFlags.IS_REACTIVE) {
             return true
         }
         return Reflect.get(target, key, receiver)
@@ -22,8 +23,8 @@ const mutableHandlers = {
 
 
 export function reactive<T extends object>(target: T) {
-    if(!isObject(target)){
-        if(__DEV__){
+    if (!isObject(target)) {
+        if (__DEV__) {
             console.warn('reactive.ts: 传入的不是一个object')
         }
         return
@@ -31,7 +32,7 @@ export function reactive<T extends object>(target: T) {
 
     // 传入的对象是否已经被代理，是则直接返回被代理的对象
     const exsitingProxy = reactiveWeakMap.get(target)
-    if(exsitingProxy){
+    if (exsitingProxy) {
         return exsitingProxy
     }
 
@@ -39,7 +40,7 @@ export function reactive<T extends object>(target: T) {
     // 如果传入的是普通对象，此时 target.__v_isReactive 的值为undefined,直接进行后续逻辑进行代理
     // 如果传入的是已经被reactive代理过的对象，此时 target.__v_isReactive 的值为true，
     // 因为此时获取__v_isReactive属性会进入到mutableHandlers中get函数，get函数里面进行了判断 key为__v_isReactive直接返回true
-    if(target[ReactiveFlags.IS_REACTIVE]){
+    if (target[ReactiveFlags.IS_REACTIVE]) {
         return target
     }
 
