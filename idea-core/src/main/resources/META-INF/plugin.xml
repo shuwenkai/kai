@@ -1,0 +1,94 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>org.example.demo</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>Demo</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="wk@yourcompany.com" url="https://www.yourcompany.com">Wk</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    自定义描述信息，随便填充之40个字符发哈家乐福哈课件返回发哈会计法积分哈哈非建安费
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <!--    声明插件对其他插件的依赖，而不是用来引入 Java 库或者框架的;-->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+
+    <!-- 自己扩展的东西，新增的需要在此处进行扩展 -->
+    <extensions defaultExtensionNs="com.intellij">
+        <!--    扩展左侧图标    -->
+        <codeInsight.lineMarkerProvider implementationClass="org.example.ct.inlay.LineMarkerProviderImpl"
+                                        language="JAVA"/>
+        <!--    扩展提示信息（基于codeVisionProvider）    -->
+        <codeInsight.codeVisionProvider implementation="org.example.ct.inlay.CodeVisionProviderImpl"/>
+        <!--    扩展提示信息    -->
+        <codeInsight.daemonBoundCodeVisionProvider implementation="org.example.ct.inlay.DaemonCodeVisionProviderImpl"/>
+        <!--    扩展一个服务，服务里面新建了一个侧边窗口    -->
+        <toolWindow factoryClass="org.example.ct.MainToolWindow" id="CodeChat" anchor="right"/>
+        <!--    扩展vsc    -->
+        <checkinHandlerFactory implementation="org.example.vcs.InsertMessage"/>
+
+        <!--    扩展设置    -->
+        <applicationConfigurable instance="org.example.settings.AppSettingsConfigurable"
+                                 id="org.example.settings.AppSettingsConfigurable"
+                                 displayName="DisplayName: 展示在左侧的label"
+                                 parentId="tools"
+        />
+        <!--    注册为应用级    -->
+        <applicationService serviceImplementation="org.example.settings.AppSettingsState"/>
+        <!--    注册为项目级    -->
+        <!--        <projectService serviceImplementation="org.example.settings.AppSettingsState" />-->
+    </extensions>
+    <actions>
+        <group id="Demo.GroupId" text="_第一个按钮" description="A描述信息">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="ShowHelloWorld" class="org.example.actions.ShowHelloWorld" text="ShowHelloWorld"
+                    description="A创建一个主菜单，描述信息">
+            </action>
+        </group>
+        <action class="org.example.editor.EditorAreaIllustration"
+                id="org.example.editor.EditorAreaIllustration"
+                text="替换文本为替换内容"
+                description="Desc替换描述文本"
+                icon="/icons/example.svg"
+        >
+
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <!--            icon="SdkIcons.Sdk_default_icon" -->
+        <!--
+            MainMenu：添加到主菜单，作为一级菜单项。
+            EditorPopupMenu：添加到编辑器右键菜单。
+            Toolbar：添加到主工具栏。
+            MainMenu.File：添加到主菜单的文件（File）一级菜单项下。
+            MainMenu.Edit：添加到主菜单的编辑（Edit）一级菜单项下。
+            MainMenu.View：添加到主菜单的视图（View）一级菜单项下。
+            Vcs.Group：添加到版本控制（VCS）工具栏分组。
+          -->
+        <action id="org.example.editor.GetEditorCaret"
+                class="org.example.editor.GetEditorCaret"
+                text="获取caret对象信息"
+                description="获取caret对象信息">
+            <add-to-group group-id="EditorPopupMenu"
+                          anchor="after"
+                          relative-to-action="org.example.editor.EditorAreaIllustration"/>
+        </action>
+        <action id="org.example.editor.EditorEventTest"
+                class="org.example.editor.EditorEventTest"
+                text="编辑器事件测试"
+                description="编辑器事件测试">
+            <add-to-group group-id="EditorPopupMenu"
+                          anchor="after"
+                          relative-to-action="org.example.editor.GetEditorCaret"/>
+        </action>
+    </actions>
+</idea-plugin>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+    <script>
+        // VConsole 默认会挂载到 `window.VConsole` 上
+        var vConsole = new window.VConsole();
+        // 接下来即可照常使用 `console` 等方法
+          console.log('Hello world');
+
+          // 结束调试后，可移除掉
+          // vConsole.destroy();
+    </script>
+</head>
+<body>
+<div class="root">
+    <h1>hello world</h1>
+    <a href="#" >你好</a>
+    <div>
+        <button type="button" onclick="alertCb()">alert</button>
+        <button type="button" onclick="clickCb()">click</button>
+    </div>
+</div>
+<script>
+{
+    const channel = new BroadcastChannel("java-to-js");
+    channel.onmessage = evt => {
+        console.log(evt)
+        console.log('javascript输出:', evt.data)
+        try{
+            const data = JSON.parse(evt.data)
+            console.log('data=', data)
+        }catch(e) {
+            console.log(e)
+            console.log('js2java', evt.data)
+        }
+    }
+    window._cusMessageChannel = channel
+    console.log('javascript csl')
+}
+</script>
+<script>
+    function alertCb() {
+          window.js2Java(JSON.stringify({ type: 1, data: { message: 'javascript传过来的message信息' }}))
+    }
+
+    function clickCb() {
+          window.js2Java(JSON.stringify({ type: 2, data: { message: 'javascript传过来的message信息' }}))
+    }
+</script>
+</body>
+</html>
